@@ -15,7 +15,6 @@ public class ChatServiceWebSocketHandler extends TextWebSocketHandlerAdapter {
 
     private Set<WebSocketSession> sessions = new HashSet<WebSocketSession>();
 
-
     @Autowired
     public ChatServiceWebSocketHandler(ChatService chatService) {
         this.chatService = chatService;
@@ -24,18 +23,24 @@ public class ChatServiceWebSocketHandler extends TextWebSocketHandlerAdapter {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
+        broadcastMessage(session.getId() + " Has joined the chat");
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         sessions.remove(session);
+        broadcastMessage(session.getId() + " Has left the chat");
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String reply = chatService.sendMessage(session.getId(), message.getPayload());
+        broadcastMessage(reply);
+    }
+
+    private void broadcastMessage(String message) throws Exception{
         for (WebSocketSession webSocketSession : sessions) {
-            webSocketSession.sendMessage(new TextMessage(reply));
+            webSocketSession.sendMessage(new TextMessage(message));
         }
     }
 }
