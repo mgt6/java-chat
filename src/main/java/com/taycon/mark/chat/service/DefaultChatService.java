@@ -1,4 +1,4 @@
-package com.taycon.mark.chat;
+package com.taycon.mark.chat.service;
 
 public class DefaultChatService implements ChatService{
 
