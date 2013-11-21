@@ -4,7 +4,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
 
     <script>
-        var sock = new SockJS('http://127.0.0.1:8080/chat');
+        var sock = new SockJS('/chat');
         function ChatCtrl($scope) {
             $scope.messages = [];
             $scope.sendMessage = function() {
